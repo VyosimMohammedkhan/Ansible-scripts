@@ -1,0 +1,5 @@
+- hosts: windows
+  gather_facts: false
+  tasks:
+    - name: shutdown all pcs
+      win_shell: shutdown -r -t 0

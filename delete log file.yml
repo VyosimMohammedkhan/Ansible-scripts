@@ -1,0 +1,5 @@
+- hosts: windows
+  gather_facts: false
+  tasks:  
+    - name: delete log file
+      win_shell: rm c:\CLIENT\log.txt

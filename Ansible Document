@@ -1,0 +1,81 @@
+ANSIBLE
+
+important points :
+
+1) Ansible control node can only be installed in Linux-based systems.
+2) python 3 and winRM should be installed and configured on  ansible host nodes
+3) Ansible can control windows, linux as well as mac machines.
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+How to install control node :
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+-> use the following commands to install ansible on Linux
+sudo apt update
+sudo apt install ansible
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+-> open the ansible hosts file 
+sudo nano /etc /ansible /hosts
+
+note : path differs for different os. The above path is for ubuntu
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+-> Add a group and group members in the hosts file
+
+[group_name]
+group_member_1 var1=var1Value var2=var2Value .....
+group_member_2 var1=var1Value var2=var2Value .....
+group_member_3 var1=var1Value var2=var2Value .....
+.
+.
+.
+
+
+note : group members can be added using ip address as well as hostname. (we have only experimented with ip address)
+note : different variable values can be passed to every host by adding <varname>=<varvalue> after every member
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+-> Add the required vars for each group as follows
+[<group_name>:vars]
+ansible_user=<client_user_name>
+ansible_password=<client_password>
+ansible_port=5986
+ansible_connection=winrm  #(other alternative is SSH)
+ansible_winrm_transport=basic
+ansible_winrm_server_cert_validation=ignore
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+-> configure managed nodes (clients)
+managed nodes should fulfill the following requirements
+    1}winrm should be set up and running
+    2}python should be installed
+
+note: for windows machines, python is generally pre installed.
+note: for our specific case we are executing the following steps :
+  - create new user on client by the name "Crawler" and password "123"
+  - change change hostname and ip address for ease of management
+  - update timezone and disable cpu sleep
+  - configure winrm
+All of these steps are taken care of in the pre-deployment script.
+Just run the pre_deployment_script.ps1 as administrator and give a new ip address and hostname when prompted
+Once script is completed, restart the PC
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------
+-> test ansible connection from control node to managed node using the following command
+ansible <group_name or host_ip_address> -m win_ping
+
+note: for linux: ping; for windows: win_ping
+note: if you try to ping using ip address, it should first be added in the hosts file
+note: if the ping doesn't get a pong response then it means the setup is not completed properly
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+How to run a yml script using ansible
+
+-> use the following command to run a yml playbook script using ansible 
+ansible-playbook /path/to/yml/file
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Start-Process -FilePath "$env:SystemDrive\ZABBIX\zabbix_agent2-6.2.7-windows-i386-openssl.msi" -ArgumentList "/qn SERVER=127.0.0.1 SERVERACTIVE=127.0.0.1 HOSTNAME=OMEN-host" -Wait
+

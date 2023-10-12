@@ -1,0 +1,12 @@
+- hosts: test
+  gather_facts: false
+  tasks:
+#    - name: add CLIENT folder to windef exclusions
+#      become: yes
+#      become_method: runas
+#      become_user: "Crawler"
+#      win_shell: Set-MpPreference -ExclusionPath "c:\Client"
+    - name: send chrome.exe
+      win_copy:
+        src: /home/dell/Documents/chromium/chrome.exe
+        dest: c:\CLIENT\chromium\

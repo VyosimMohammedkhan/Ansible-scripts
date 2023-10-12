@@ -1,0 +1,9 @@
+- hosts: windows
+  gather_facts: false
+  tasks:
+    - name: delete Machinecode file
+      win_shell: rm c:\CLIENT\MACHINECODE.txt
+    - name: create machinecode file
+      win_copy:
+        content: "{{ machinecode }}"
+        dest: c:\CLIENT\.machinecode

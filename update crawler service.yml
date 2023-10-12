@@ -1,0 +1,17 @@
+- hosts: windows
+  gather_facts: false
+  tasks:
+    - name: nssm stop command
+      win_shell: c:\CLIENT\nssm.exe stop crawlingService
+    - name: nssm remove command
+      win_shell: c:\CLIENT\nssm.exe remove crawlingService confirm   
+    - name: delete crawler.exe
+      win_shell: rm c:\CLIENT\crawler.exe
+    -name: copy crawler.exe
+      win_copy:
+        src: /home/dell/Documents/CLIENT/crawler.exe
+        dest: c:\CLIENT\
+    - name: nssm install command
+      win_shell: c:\CLIENT\nssm.exe stop crawlingService "c:\CLIENT\crawler.exe"
+    - name: nssm start command
+      win_shell: c:\CLIENT\nssm.exe start crawlingService

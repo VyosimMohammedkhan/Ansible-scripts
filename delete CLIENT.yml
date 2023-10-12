@@ -1,0 +1,9 @@
+- hosts: cslab
+  gather_facts: false
+  tasks:
+    - name: nssm stop command
+      win_shell: c:\CLIENT\nssm.exe stop crawlingService
+    - name: nssm remove command
+      win_shell: c:\CLIENT\nssm.exe remove crawlingService confirm   
+    - name: delete CLIENT folder
+      win_shell: rm c:\CLIENT -r -force

@@ -1,0 +1,6 @@
+- hosts: cslab
+  gather_facts: false
+  tasks:
+    - name: change hostname
+      debug:
+        var=ansible_hostname

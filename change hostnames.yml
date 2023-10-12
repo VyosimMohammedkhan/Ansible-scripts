@@ -1,0 +1,7 @@
+- hosts: cslab
+  gather_facts: false
+  tasks:
+    - name: change hostname
+      win_shell: Rename-Computer -NewName "{{ hostname }}"         
+    - name: restart pc
+      win_shell: Restart-Computer -Force

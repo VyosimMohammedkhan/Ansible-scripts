@@ -1,0 +1,24 @@
+- hosts: cslab
+  gather_facts: false
+  tasks:
+    - name: copy Client folder
+      win_copy:
+        src: /home/dell/Documents/CLIENT
+        dest: c:\
+    - name: add CLIENT folder to windef exclusions
+      become: yes
+      become_method: runas
+      become_user: "Crawler"
+      win_shell: Set-MpPreference -ExclusionPath "c:\Client"
+    - name: unzip chromium
+      win_shell: tar -xvf C:\CLIENT\chromium.zip -C C:\CLIENT
+    - name: delete chromium zip
+      win_shell: rm c:\CLIENT\chromium.zip
+    - name: create machinecode file
+      win_copy:
+        content: "{{ machinecode }}"
+        dest: c:\CLIENT\.machinecode
+    - name: nssm install command
+      win_shell: c:\CLIENT\nssm.exe install crawlingService "c:\CLIENT\crawler.exe"
+    - name: nssm start command
+      win_shell: c:\CLIENT\nssm.exe start crawlingService                                          
